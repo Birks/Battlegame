@@ -7,11 +7,28 @@ public class MainGame {
 
         frame.add(gpanel);
         frame.setTitle("Battlegame");
-        frame.setSize(750, 800);
+        frame.setResizable(false);
+        frame.setSize(600 +5, 650);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        gpanel.walls.debugWorld();
+        int counter=0;
+        while (true) {
+
+            gpanel.repaint();
+            gpanel.update();
+
+            if (counter==100) {
+                gpanel.debugWorld();
+                counter=0;
+            }
+
+            counter++;
+            Thread.sleep(10);
+        }
+
+
+
 
 
     }
