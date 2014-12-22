@@ -5,27 +5,55 @@ class Man {
     private static final int PLAYER = 2;
     private static final int START_X = 45;
     private static final int START_Y = 45;
-    private static final int BLOCK_SIZE = 30;
+    private static final int PLAYER_SIZE = 30;
 
+    private GamePanel game;
     private int x;
     private int y;
     private int xa = 0;
     private int ya = 0;
 
+
     // The main array which contains the parts of the world
     private int world[][];
 
     // Constructor
-    public Man(int[][] world) {
+    public Man(int[][] world, GamePanel game) {
         this.world = world;
+        this.game = game;
         x = START_X;
         y = START_Y;
     }
 
     // Moving the player in x and y directions
     public void move() {
-        x = x+xa;
-        y = y+ya;
+
+        if (checkCollision()) {
+            xa = 0;
+            ya = 0;
+            y += 2;
+            if (checkCollision()) {
+                y -= 3;
+            }
+            x += 2;
+            if (checkCollision()) {
+                x -= 3;
+            }
+        }
+        x = x + xa;
+        y = y + ya;
+    }
+
+    // Checks does the player collide with the walls
+    public boolean checkCollision() {
+        boolean isCollide = false;
+        Rectangle[] boundArr = game.walls.getRectangleArr();
+        for (Rectangle item : boundArr) {
+            isCollide = getBounds().intersects(item);
+            if (isCollide)
+                break;
+        }
+        return isCollide;
     }
 
 
@@ -48,7 +76,7 @@ class Man {
     // This part draws the player on the screen
     public void paint(Graphics2D g) {
         g.setColor(Color.BLUE);
-        g.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+        g.fillRect(x, y, PLAYER_SIZE, PLAYER_SIZE);
 
     }
 
@@ -63,11 +91,15 @@ class Man {
         }
 
         // New player location
-        int j = Math.round((x+BLOCK_SIZE/2) / 40); // Wall block size
-        int i = Math.round((y+BLOCK_SIZE/2) / 40);
+        int j = Math.round((x + PLAYER_SIZE / 2) / Walls.getWallSize()); // Static
+        int i = Math.round((y + PLAYER_SIZE / 2) / Walls.getWallSize());
         world[i][j] = PLAYER;
 
     }
 
+    // Returns the player object boundary
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, PLAYER_SIZE, PLAYER_SIZE);
+    }
 
 }

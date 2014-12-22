@@ -3,24 +3,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
 
 
 class GamePanel extends JPanel {
     private static final int ARRAY_WIDTH = 15;
     private static final int ARRAY_HEIGHT = 13;
-    private static final int BLOCK_SIZE = 40;
-    private static final int WALL = 1;
     private int world[][];
 
-    private Walls walls;
-    private Man man;
+    Walls walls;
+    Man man;
 
     // Constructor
     public GamePanel() {
         world = new int[ARRAY_HEIGHT][ARRAY_WIDTH];
         walls = new Walls(world);
-        man = new Man(world);
+        man = new Man(world, this);
 
         // Key recognizing part
         addKeyListener(new KeyListener() {
