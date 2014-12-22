@@ -1,39 +1,40 @@
 import java.awt.*;
+import java.util.Random;
 
-class Walls {
+class Bricks {
     private static final int BLOCK_SIZE = 40;
-    private static  int WALL = 1;
+    private static int BRICK = 3;
     Rectangle[] boundArr = new Rectangle[82];
     int counter = 0;
+    Random randomnumber = new Random();
 
     // The main array which contains the parts of the world
     private int world[][];
 
     // Constructor
-    public Walls(int[][] world) {
+    public Bricks(int[][] world) {
         this.world = world;
-        setWorldWalls();
+        setWorldBlocks();
     }
 
-    // Fills the world array with walls
-    private void setWorldWalls() {
-        for (int i = 0; i < world.length; i++) {
-            for (int j = 0; j < world[i].length; j++) {
-                if (i == 0 || j == 0 || i == world.length - 1 || j == world[i].length - 1 || (i % 2 == 0 && j % 2 == 0)) {
-                    world[i][j] = WALL;
-                    boundArr[counter] = new Rectangle(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                    counter++;
-                }
-
+    // Fills the world array with bricks
+    private void setWorldBlocks() {
+        for (int k = 0; k < 250; k++) {
+            int i=randomnumber.nextInt(13);
+            int j=randomnumber.nextInt(15);
+            if (world[i][j]==0) {
+                world[i][j]=BRICK;
             }
         }
+
     }
 
     // This part draws the walls on the screen
     public void paint(Graphics2D g) {
+        g.setColor(Color.YELLOW);
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
-                if (world[i][j] == WALL) {
+                if (world[i][j] == BRICK) {
                     g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                 }
             }
@@ -49,6 +50,4 @@ class Walls {
     public static int getBlockSize() {
         return BLOCK_SIZE;
     }
-
-
 }

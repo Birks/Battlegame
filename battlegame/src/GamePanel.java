@@ -11,6 +11,7 @@ class GamePanel extends JPanel {
     private int world[][];
 
     Walls walls;
+    Bricks bricks;
     Man man;
 
     // Constructor
@@ -18,6 +19,7 @@ class GamePanel extends JPanel {
         world = new int[ARRAY_HEIGHT][ARRAY_WIDTH];
         walls = new Walls(world);
         man = new Man(world, this);
+        bricks=new Bricks(world);
 
         // Key recognizing part
         addKeyListener(new KeyListener() {
@@ -54,6 +56,7 @@ class GamePanel extends JPanel {
 
 
         walls.paint(g2d);
+        bricks.paint(g2d);
         man.paint(g2d);
     }
 

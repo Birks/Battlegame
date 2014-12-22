@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 class Man {
+
     private static final int PLAYER = 2;
     private static final int START_X = 45;
     private static final int START_Y = 45;
@@ -91,8 +92,8 @@ class Man {
         }
 
         // New player location
-        int j = Math.round((x + PLAYER_SIZE / 2) / Walls.getWallSize()); // Static
-        int i = Math.round((y + PLAYER_SIZE / 2) / Walls.getWallSize());
+        int j = Math.round((x + PLAYER_SIZE / 2) / Walls.getBlockSize()); // Static
+        int i = Math.round((y + PLAYER_SIZE / 2) / Walls.getBlockSize());
         world[i][j] = PLAYER;
 
     }
@@ -101,5 +102,7 @@ class Man {
     public Rectangle getBounds() {
         return new Rectangle(x, y, PLAYER_SIZE, PLAYER_SIZE);
     }
+
+
 
 }
