@@ -20,7 +20,7 @@ public class MainGame {
 
             // To refresh the console less
             if (counter == 100) {
-                gpanel.debugWorld();
+                //gpanel.debugWorld();
                 counter = 0;
             }
             counter++;

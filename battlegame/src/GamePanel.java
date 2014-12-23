@@ -17,9 +17,10 @@ class GamePanel extends JPanel {
     // Constructor
     public GamePanel() {
         world = new int[ARRAY_HEIGHT][ARRAY_WIDTH];
+        bricks=new Bricks(world);
         walls = new Walls(world);
         man = new Man(world, this);
-        bricks=new Bricks(world);
+
 
         // Key recognizing part
         addKeyListener(new KeyListener() {
@@ -49,7 +50,7 @@ class GamePanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        g.setColor(Color.GRAY);
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);

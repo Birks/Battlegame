@@ -1,3 +1,5 @@
+import org.apache.commons.lang.ArrayUtils;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -48,11 +50,15 @@ class Man {
     // Checks does the player collide with the walls
     public boolean checkCollision() {
         boolean isCollide = false;
-        Rectangle[] boundArr = game.walls.getRectangleArr();
+        Rectangle[] boundArr = (Rectangle[]) ArrayUtils.addAll(game.walls.getRectangleArr(), game.bricks.getRectangleArr());
         for (Rectangle item : boundArr) {
-            isCollide = getBounds().intersects(item);
-            if (isCollide)
-                break;
+            // Check does the item is zero (last items in array could be 0)
+            if (item != null) {
+                isCollide = getBounds().intersects(item);
+                if (isCollide)
+                    break;
+            }
+
         }
         return isCollide;
     }
@@ -102,7 +108,6 @@ class Man {
     public Rectangle getBounds() {
         return new Rectangle(x, y, PLAYER_SIZE, PLAYER_SIZE);
     }
-
 
 
 }
