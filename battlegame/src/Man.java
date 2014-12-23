@@ -15,6 +15,9 @@ class Man {
     private int y;
     private int xa = 0;
     private int ya = 0;
+    private boolean booleanBombPlaced=false;
+    private boolean thirdBoolBomb = false;
+    Bomb bomb;
 
 
     // The main array which contains the parts of the world
@@ -51,15 +54,31 @@ class Man {
     public boolean checkCollision() {
         boolean isCollide = false;
         Rectangle[] boundArr = (Rectangle[]) ArrayUtils.addAll(game.walls.getRectangleArr(), game.bricks.getRectangleArr());
+
+        // Required for bomb check
+        if (!booleanBombPlaced) {
+
+            checkBombPlaced();
+        } else {
+            thirdBoolBomb =true;
+        }
+
         for (Rectangle item : boundArr) {
             // Check does the item is zero (last items in array could be 0)
             if (item != null) {
+
+                // Complex statements for bomb placement check
+                if (thirdBoolBomb) {
+                  isCollide= getBounds().intersects(bomb.getBounds());
+                  if (!isCollide)
+                      isCollide = getBounds().intersects(item);
+                } else
                 isCollide = getBounds().intersects(item);
                 if (isCollide)
                     break;
             }
-
         }
+
         return isCollide;
     }
 
@@ -78,14 +97,59 @@ class Man {
             ya = -2;
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             ya = 2;
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            booleanBombPlaced=false;
+            thirdBoolBomb =false;
+            bomb = new Bomb(world, getPlayerArrayRow(), getPlayerArrayColumn());
+        }
+
     }
 
     // This part draws the player on the screen
     public void paint(Graphics2D g) {
+        if (bomb != null)
+            bomb.paint(g);
         g.setColor(Color.BLUE);
         g.fillRect(x, y, PLAYER_SIZE, PLAYER_SIZE);
 
+
     }
+
+    // Returns the row where is the player this moment
+    public int getPlayerArrayRow() {
+        int ret = 0;
+        for (int i = 0; i < world.length; i++) {
+            for (int j = 0; j < world[i].length; j++) {
+                if (world[i][j] == PLAYER)
+                    ret = i;
+            }
+        }
+        return ret;
+    }
+
+    // Returns the column where is the player this moment
+    public int getPlayerArrayColumn() {
+        int ret = 0;
+        for (int i = 0; i < world.length; i++) {
+            for (int j = 0; j < world[i].length; j++) {
+                if (world[i][j] == PLAYER)
+                    ret = j;
+            }
+        }
+        return ret;
+    }
+
+    // Does the player standing on bomb
+    public void checkBombPlaced() {
+        if(bomb!=null) {
+              if (!getBounds().intersects(bomb.getBounds())){
+                  booleanBombPlaced = true;
+              } else
+                  booleanBombPlaced= false;
+        } else
+        booleanBombPlaced= false;
+    }
+
 
     // Puts the PLAYER (2) number in the matrix
     public void putPlayerInMatrix() {
