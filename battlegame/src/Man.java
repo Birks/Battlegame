@@ -98,9 +98,8 @@ class Man {
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             ya = 2;
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            booleanBombPlaced=false;
-            thirdBoolBomb =false;
-            bomb = new Bomb(world, getPlayerArrayRow(), getPlayerArrayColumn());
+
+            bomb = new Bomb(world, this, getPlayerArrayRow(), getPlayerArrayColumn());
         }
 
     }
@@ -148,6 +147,19 @@ class Man {
                   booleanBombPlaced= false;
         } else
         booleanBombPlaced= false;
+    }
+
+    // This destroys the explosion and the bomb object
+    public void destroyBomb() {
+        for (int i = 0; i < world.length; i++) {
+            for (int j = 0; j < world[i].length; j++) {
+                if (world[i][j] == Bomb.getExplosion())
+                    world[i][j] = 0;
+            }
+        }
+        bomb=null;
+        booleanBombPlaced=false;
+        thirdBoolBomb =false;
     }
 
 

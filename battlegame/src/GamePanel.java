@@ -65,6 +65,7 @@ class GamePanel extends JPanel {
     // Updates the game
     public void update() {
         man.move();
+        bricks.setBoundaries();
         man.putPlayerInMatrix();
     }
 
