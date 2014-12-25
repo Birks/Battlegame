@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 class Man {
 
-    private static final int PLAYER = 2;
+    public static final int PLAYER = 2;
     private static final int START_X = 45;
     private static final int START_Y = 45;
     private static final int PLAYER_SIZE = 30;
@@ -99,7 +99,7 @@ class Man {
             ya = 2;
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
-            bomb = new Bomb(world, this, getPlayerArrayRow(), getPlayerArrayColumn());
+            bomb = new Bomb(world, this, getPlayerArrayRow(), getPlayerArrayColumn(),3);
         }
 
     }
@@ -153,7 +153,7 @@ class Man {
     public void destroyBomb() {
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
-                if (world[i][j] == Bomb.getExplosion())
+                if (world[i][j] == Bomb.EXPLOSION)
                     world[i][j] = 0;
             }
         }

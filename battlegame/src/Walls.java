@@ -1,7 +1,7 @@
 import java.awt.*;
 
 class Walls extends Blocks {
-    private static final int WALL = 1;
+    public static final int WALL = 1;
 
     // Constructor
     public Walls(int[][] world) {
@@ -23,7 +23,10 @@ class Walls extends Blocks {
                 }
             }
         }
+        counter=0;
     }
+
+
 
 
 }

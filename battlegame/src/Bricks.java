@@ -2,14 +2,14 @@ import java.awt.*;
 import java.util.Random;
 
 class Bricks extends Blocks {
-    private static final int BRICK = 3;
+    public static final int BRICK = 3;
     Random randomnumber = new Random();
 
     // Constructor
     public Bricks(int[][] world) {
         super(world);
         BLOCK = BRICK;
-        boundArr = new Rectangle[280];
+        //boundArr = new Rectangle[280];
         blockColor = Color.YELLOW;
         setWorldBlocks();
     }
@@ -29,11 +29,13 @@ class Bricks extends Blocks {
 
     // Needed to explode the setWorldBlock because array needs to be refreshed
     public void setBoundaries(){
+        boundArr = new Rectangle[280];
         counter = 0;
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
                 if (world[i][j] == BLOCK) {
                     boundArr[counter] = new Rectangle(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                    //System.out.println(boundArr[counter]);
                     counter++;
                 }
             }

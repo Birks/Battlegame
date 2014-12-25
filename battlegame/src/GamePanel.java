@@ -56,8 +56,9 @@ class GamePanel extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
 
-        walls.paint(g2d);
+
         bricks.paint(g2d);
+        walls.paint(g2d);
         man.paint(g2d);
     }
 
@@ -66,6 +67,7 @@ class GamePanel extends JPanel {
     public void update() {
         man.move();
         bricks.setBoundaries();
+        walls.setWorldBlocks();
         man.putPlayerInMatrix();
     }
 

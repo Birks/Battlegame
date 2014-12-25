@@ -4,12 +4,13 @@ import java.util.TimerTask;
 
 public class Bomb {
     private static final int BOMB = 8;
-    private static final int EXPLOSION =4;
+    public static final int EXPLOSION = 4;
     private static final int BLOCK_SIZE = 40;
     private int bomb_row;
     private int bomb_column;
     private int x;
     private int y;
+    private int exp_length;
     private boolean isExplosion = false;
     private Man player;
     Timer timerStart;
@@ -20,14 +21,14 @@ public class Bomb {
     private int world[][];
 
     // Constructor
-    public Bomb(int[][] world, Man player, int player_row, int player_column) {
-        this.player=player;
+    public Bomb(int[][] world, Man player, int player_row, int player_column, int exp_length) {
+        this.player = player;
         this.world = world;
         bomb_row = player_row;
         bomb_column = player_column;
+        this.exp_length = exp_length;
         setBombXY();
 
-        System.out.println("Bomb timer has been started.");
         timerStart = new Timer();
         timerStart.schedule(new startTimer(), 5 * 1000);
 
@@ -36,7 +37,6 @@ public class Bomb {
     // When bomb placed it starts to count for 5 sec
     class startTimer extends TimerTask {
         public void run() {
-            System.out.println("Bomb timer finished");
             makeExplosion();
             timerStart.cancel(); //Terminate the thread
         }
@@ -45,7 +45,6 @@ public class Bomb {
     // When explosion made, 2 second interval starts
     class endExplosion extends TimerTask {
         public void run() {
-            System.out.println("Eplosion ended");
             player.destroyBomb();
             timerEnd.cancel(); //Terminate the thread
         }
@@ -54,19 +53,71 @@ public class Bomb {
     // To fill the array with explosion (4)
     private void makeExplosion() {
         isExplosion = true;
-        if (world[bomb_row - 1][bomb_column] != 1) {
-            world[bomb_row - 1][bomb_column] = EXPLOSION;;
+        boolean stopTop = false;
+        boolean stopBottom = false;
+        boolean stopLeft = false;
+        boolean stopRight = false;
+
+        // To increase the length of the explosion
+        for (int i = 1; i <= exp_length; i++) {
+
+            // To explode only one brick top
+            if (!stopTop) {
+                // Check walls for top
+                if (bomb_row - i >= 1) {
+                    if (world[bomb_row - i][bomb_column] != Walls.WALL && world[bomb_row - 1][bomb_column] != Walls.WALL) {
+                        if (world[bomb_row - i][bomb_column] == Bricks.BRICK) {
+                            stopTop = true;
+                        }
+                        world[bomb_row - i][bomb_column] = EXPLOSION;
+                    }
+                }
+            }
+
+            // To explode only one brick bottom
+            if (!stopBottom) {
+                // Check walls for bottom
+                if (bomb_row + i <= 11) {
+                    if (world[bomb_row + i][bomb_column] != Walls.WALL && world[bomb_row + 1][bomb_column] != Walls.WALL) {
+                        if (world[bomb_row + i][bomb_column] == Bricks.BRICK) {
+                            stopBottom = true;
+                        }
+                        world[bomb_row + i][bomb_column] = EXPLOSION;
+                    }
+                }
+            }
+
+
+            // To explode only one brick left
+            if (!stopLeft) {
+                // Check walls for left
+                if (bomb_column - i >= 1) {
+                    if (world[bomb_row][bomb_column - i] != Walls.WALL && world[bomb_row][bomb_column - 1] != Walls.WALL) {
+                        if (world[bomb_row][bomb_column - i] == Bricks.BRICK) {
+                            stopLeft = true;
+                        }
+                        world[bomb_row][bomb_column - i] = EXPLOSION;
+                    }
+                }
+            }
+
+            //To explode only one brick right
+            if (!stopRight) {
+                // Check walls for right
+                if (bomb_column + i <= 13) {
+                    if (world[bomb_row][bomb_column + i] != Walls.WALL && world[bomb_row][bomb_column + 1] != Walls.WALL) {
+                        if (world[bomb_row][bomb_column + i] == Bricks.BRICK) {
+                            stopRight = true;
+                        }
+                        world[bomb_row][bomb_column + i] = EXPLOSION;
+                    }
+                }
+            }
+
         }
-        if (world[bomb_row + 1][bomb_column] != 1) {
-            world[bomb_row + 1][bomb_column] =EXPLOSION;;
-        }
-        if (world[bomb_row][bomb_column - 1] != 1) {
-            world[bomb_row][bomb_column - 1] = EXPLOSION;;
-        }
-        if (world[bomb_row][bomb_column + 1] != 1) {
-            world[bomb_row][bomb_column + 1] = EXPLOSION;;
-        }
-        world[bomb_row][bomb_column]=EXPLOSION;
+
+
+        world[bomb_row][bomb_column] = EXPLOSION;
         timerEnd = new Timer();
         timerEnd.schedule(new endExplosion(), 2 * 1000);
     }
@@ -96,24 +147,9 @@ public class Bomb {
 
     }
 
-
-    public int getBomb_column() {
-        return bomb_column;
-    }
-
-    public int getBomb_row() {
-        return bomb_row;
-    }
-
-
     // Returns the bomb boundary
     public Rectangle getBounds() {
         return new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE);
-    }
-
-    // Returns the constant value of EXPLOSION (4)
-    public static int getExplosion() {
-        return EXPLOSION;
     }
 
 
