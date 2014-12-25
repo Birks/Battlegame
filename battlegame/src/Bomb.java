@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,10 +12,13 @@ public class Bomb {
     private int x;
     private int y;
     private int exp_length;
-    private boolean isExplosion = false;
+    public boolean isExplosion = false;
     private Man player;
     Timer timerStart;
     Timer timerEnd;
+    int counter = 0;
+
+    Rectangle[] boundArr;
 
 
     // The main array which contains the parts of the world
@@ -118,6 +122,7 @@ public class Bomb {
 
 
         world[bomb_row][bomb_column] = EXPLOSION;
+        setBoundaries();
         timerEnd = new Timer();
         timerEnd.schedule(new endExplosion(), 2 * 1000);
     }
@@ -145,6 +150,29 @@ public class Bomb {
         }
 
 
+    }
+
+    public void setBoundaries(){
+        boundArr = new Rectangle[30];
+        counter = 0;
+        for (int i = 0; i < world.length; i++) {
+            for (int j = 0; j < world[i].length; j++) {
+                if (world[i][j] == EXPLOSION) {
+
+                    boundArr[counter] = new Rectangle(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                    counter++;
+                } else if (world[i][j]==Man.PLAYER) {
+                    // When player is in the explosion
+                    JOptionPane.showMessageDialog(null, "You are dead...");
+                }
+            }
+        }
+
+    }
+
+    // Returns the array which contains the boundaries data
+    public Rectangle[] getRectangleArr() {
+        return boundArr;
     }
 
     // Returns the bomb boundary

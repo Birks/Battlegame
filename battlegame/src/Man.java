@@ -1,5 +1,6 @@
 import org.apache.commons.lang.ArrayUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -34,6 +35,10 @@ class Man {
     // Moving the player in x and y directions
     public void move() {
 
+        if (checkExplosionCollision()) {
+            JOptionPane.showMessageDialog(null,"You are dead...");
+        }
+
         if (checkCollision()) {
             xa = 0;
             ya = 0;
@@ -48,7 +53,11 @@ class Man {
         }
         x = x + xa;
         y = y + ya;
+
+
     }
+
+
 
     // Checks does the player collide with the walls
     public boolean checkCollision() {
@@ -81,6 +90,26 @@ class Man {
 
         return isCollide;
     }
+
+    // Gets the explosion boundary array and check does it interracts with the player
+    public boolean checkExplosionCollision() {
+        boolean isExpCollide = false;
+        if (bomb!=null && bomb.isExplosion) {
+            Rectangle[] expBoundArr = bomb.getRectangleArr();
+            for (Rectangle item : expBoundArr) {
+                if (item != null) {
+                    System.out.println(item);
+                    isExpCollide = getBounds().intersects(item);
+                    if (isExpCollide)
+                        break;
+                }
+            }
+            System.out.println();
+
+        }
+        return isExpCollide;
+    }
+
 
 
     public void keyReleased(KeyEvent e) {

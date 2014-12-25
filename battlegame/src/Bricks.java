@@ -9,7 +9,6 @@ class Bricks extends Blocks {
     public Bricks(int[][] world) {
         super(world);
         BLOCK = BRICK;
-        //boundArr = new Rectangle[280];
         blockColor = Color.YELLOW;
         setWorldBlocks();
     }
@@ -27,6 +26,7 @@ class Bricks extends Blocks {
         setBoundaries();
     }
 
+
     // Needed to explode the setWorldBlock because array needs to be refreshed
     public void setBoundaries(){
         boundArr = new Rectangle[280];
@@ -35,7 +35,6 @@ class Bricks extends Blocks {
             for (int j = 0; j < world[i].length; j++) {
                 if (world[i][j] == BLOCK) {
                     boundArr[counter] = new Rectangle(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                    //System.out.println(boundArr[counter]);
                     counter++;
                 }
             }
@@ -43,5 +42,9 @@ class Bricks extends Blocks {
 
     }
 
+    // Returns the array which contains the boundaries data
+    public Rectangle[] getRectangleArr() {
+        return boundArr;
+    }
 
 }
