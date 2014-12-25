@@ -3,6 +3,7 @@ import org.apache.commons.lang.ArrayUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 class Man {
 
@@ -14,11 +15,15 @@ class Man {
     private GamePanel game;
     private int x;
     private int y;
+    private int speed=2;
     private int xa = 0;
     private int ya = 0;
-    private boolean booleanBombPlaced=false;
+    private boolean booleanBombPlaced = false;
     private boolean thirdBoolBomb = false;
+    private int exp_length = 1;
     Bomb bomb;
+    Powerup[] powerupArr;
+    Random chance = new Random();
 
 
     // The main array which contains the parts of the world
@@ -30,33 +35,35 @@ class Man {
         this.game = game;
         x = START_X;
         y = START_Y;
+
+        powerupArr = new Powerup[15];
+
     }
 
     // Moving the player in x and y directions
     public void move() {
 
+        checkPowerUpCollision();
+
         if (checkExplosionCollision()) {
-            JOptionPane.showMessageDialog(null,"You are dead...");
+            JOptionPane.showMessageDialog(null, "You are dead...");
         }
 
         if (checkCollision()) {
             xa = 0;
             ya = 0;
-            y += 2;
+            y += speed;
             if (checkCollision()) {
-                y -= 3;
+                y -= speed+1;
             }
             x += 2;
             if (checkCollision()) {
-                x -= 3;
+                x -= speed+1;
             }
         }
         x = x + xa;
         y = y + ya;
-
-
     }
-
 
 
     // Checks does the player collide with the walls
@@ -66,10 +73,9 @@ class Man {
 
         // Required for bomb check
         if (!booleanBombPlaced) {
-
             checkBombPlaced();
         } else {
-            thirdBoolBomb =true;
+            thirdBoolBomb = true;
         }
 
         for (Rectangle item : boundArr) {
@@ -78,11 +84,11 @@ class Man {
 
                 // Complex statements for bomb placement check
                 if (thirdBoolBomb) {
-                  isCollide= getBounds().intersects(bomb.getBounds());
-                  if (!isCollide)
-                      isCollide = getBounds().intersects(item);
+                    isCollide = getBounds().intersects(bomb.getBounds());
+                    if (!isCollide)
+                        isCollide = getBounds().intersects(item);
                 } else
-                isCollide = getBounds().intersects(item);
+                    isCollide = getBounds().intersects(item);
                 if (isCollide)
                     break;
             }
@@ -91,26 +97,47 @@ class Man {
         return isCollide;
     }
 
-    // Gets the explosion boundary array and check does it interracts with the player
+    // Does the player interracts with explosion
     public boolean checkExplosionCollision() {
         boolean isExpCollide = false;
-        if (bomb!=null && bomb.isExplosion) {
+        if (bomb != null && bomb.isExplosion) {
             Rectangle[] expBoundArr = bomb.getRectangleArr();
             for (Rectangle item : expBoundArr) {
                 if (item != null) {
-                    System.out.println(item);
+                    //System.out.println(item);
                     isExpCollide = getBounds().intersects(item);
                     if (isExpCollide)
                         break;
                 }
             }
-            System.out.println();
+            //System.out.println();
 
         }
         return isExpCollide;
     }
 
+    // Check does the player interract with powerup
+    public void checkPowerUpCollision() {
+        for (int i = 0; i < 15; i++) {
+            if (powerupArr[i] != null) {
+                if (getBounds().intersects(powerupArr[i].getBounds())) {
+                    switch (powerupArr[i].type) {
+                        case Powerup.ROLLER:
+                            //System.out.println("increase speed");
+                            speed++;
+                            powerupArr[i] = null;
+                            break;
+                        case Powerup.FIRE:
+                            //System.out.println("exp length");
+                            exp_length++;
+                            powerupArr[i] = null;
+                            break;
+                    }
+                }
+            }
+        }
 
+    }
 
     public void keyReleased(KeyEvent e) {
         xa = 0;
@@ -119,16 +146,17 @@ class Man {
 
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_LEFT)
-            xa = -2;
+            xa = -speed;
         if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-            xa = 2;
+            xa = speed;
         if (e.getKeyCode() == KeyEvent.VK_UP)
-            ya = -2;
+            ya = -speed;
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
-            ya = 2;
+            ya = speed;
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-
-            bomb = new Bomb(world, this, getPlayerArrayRow(), getPlayerArrayColumn(),3);
+            if (!booleanBombPlaced) {
+                bomb = new Bomb(world, this, getPlayerArrayRow(), getPlayerArrayColumn(), exp_length);
+            }
         }
 
     }
@@ -137,6 +165,11 @@ class Man {
     public void paint(Graphics2D g) {
         if (bomb != null)
             bomb.paint(g);
+
+        for (Powerup item : powerupArr) {
+            if (item != null)
+                item.paint(g);
+        }
         g.setColor(Color.BLUE);
         g.fillRect(x, y, PLAYER_SIZE, PLAYER_SIZE);
 
@@ -169,28 +202,43 @@ class Man {
 
     // Does the player standing on bomb
     public void checkBombPlaced() {
-        if(bomb!=null) {
-              if (!getBounds().intersects(bomb.getBounds())){
-                  booleanBombPlaced = true;
-              } else
-                  booleanBombPlaced= false;
+        if (bomb != null) {
+            if (!getBounds().intersects(bomb.getBounds())) {
+                booleanBombPlaced = true;
+            } else
+                booleanBombPlaced = false;
         } else
-        booleanBombPlaced= false;
+            booleanBombPlaced = false;
     }
 
     // This destroys the explosion and the bomb object
     public void destroyBomb() {
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
-                if (world[i][j] == Bomb.EXPLOSION)
-                    world[i][j] = 0;
+                if (world[i][j] == Bomb.EXPLOSION) {
+                    // Add powerup sometimes
+                    if (chance.nextInt(100)<(10-speed)) {
+                        for (int k=0; k<powerupArr.length; k++) {
+                            if (powerupArr[k]==null) {
+                                if (chance.nextInt(100)<20)
+                                    powerupArr[k]= new Powerup(world, 5, i, j);
+                                else
+                                    powerupArr[k]= new Powerup(world, 6, i, j);
+                                break;
+                            } else
+                            world[i][j] = 0;
+                        }
+                    }
+                    else {
+                        world[i][j] = 0;
+                    }
+                }
             }
         }
-        bomb=null;
-        booleanBombPlaced=false;
-        thirdBoolBomb =false;
+        bomb = null;
+        booleanBombPlaced = false;
+        thirdBoolBomb = false;
     }
-
 
     // Puts the PLAYER (2) number in the matrix
     public void putPlayerInMatrix() {

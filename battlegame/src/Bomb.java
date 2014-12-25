@@ -124,7 +124,7 @@ public class Bomb {
         world[bomb_row][bomb_column] = EXPLOSION;
         setBoundaries();
         timerEnd = new Timer();
-        timerEnd.schedule(new endExplosion(), 2 * 1000);
+        timerEnd.schedule(new endExplosion(), 1500);
     }
 
     // Sets the location of the bomb for a later paint
@@ -158,12 +158,8 @@ public class Bomb {
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
                 if (world[i][j] == EXPLOSION) {
-
                     boundArr[counter] = new Rectangle(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                     counter++;
-                } else if (world[i][j]==Man.PLAYER) {
-                    // When player is in the explosion
-                    JOptionPane.showMessageDialog(null, "You are dead...");
                 }
             }
         }
