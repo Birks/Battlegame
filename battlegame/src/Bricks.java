@@ -15,7 +15,7 @@ class Bricks extends Blocks {
 
     // Fills the world array with bricks
     void setWorldBlocks() {
-        for (int k = 0; k < 280; k++) {
+        for (int k = 0; k < 400; k++) {
             int i = randomnumber.nextInt(13);
             int j = randomnumber.nextInt(15);
             if (world[i][j] == 0 && !(i == 1 && j == 1) && !(i == 2 && j == 1) && !(i == 1 && j == 2)) {

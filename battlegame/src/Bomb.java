@@ -153,7 +153,7 @@ public class Bomb {
     }
 
     public void setBoundaries(){
-        boundArr = new Rectangle[30];
+        boundArr = new Rectangle[200];
         counter = 0;
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {

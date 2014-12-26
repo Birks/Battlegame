@@ -12,7 +12,11 @@ class GamePanel extends JPanel {
 
     Walls walls;
     Bricks bricks;
-    Man man;
+    public Man man;
+    public Com com1;
+    public Com com2;
+    public Com com3;
+    public Com com4;
 
     // Constructor
     public GamePanel() {
@@ -21,6 +25,10 @@ class GamePanel extends JPanel {
         walls = new Walls(world);
         man = new Man(world, this);
 
+        com1= new Com(world,this,7,125,125);
+        com2= new Com(world,this,7,365,125);
+        com3= new Com(world,this,7,285,285);
+        com4= new Com(world,this,7,405,205);
 
         // Key recognizing part
         addKeyListener(new KeyListener() {
@@ -60,15 +68,34 @@ class GamePanel extends JPanel {
         bricks.paint(g2d);
         walls.paint(g2d);
         man.paint(g2d);
+        com1.paint(g2d);
+        com2.paint(g2d);
+        com3.paint(g2d);
+        com4.paint(g2d);
     }
 
 
     // Updates the game
     public void update() {
         man.move();
+        com1.move();
+        com2.move();
+        com3.move();
+        com4.move();
+
+
         bricks.setBoundaries();
         walls.setWorldBlocks();
+
         man.putPlayerInMatrix();
+
+        com1.putPlayerInMatrix();
+        com2.putPlayerInMatrix();
+        com3.putPlayerInMatrix();
+        com4.putPlayerInMatrix();
+
+
+
     }
 
     // Debugs the world matrix

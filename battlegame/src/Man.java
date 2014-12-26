@@ -19,7 +19,7 @@ class Man {
     private int xa = 0;
     private int ya = 0;
     private boolean booleanBombPlaced = false;
-    private boolean thirdBoolBomb = false;
+    public boolean thirdBoolBomb = false;
     private int exp_length = 1;
     Bomb bomb;
     Powerup[] powerupArr;
@@ -45,8 +45,19 @@ class Man {
 
         checkPowerUpCollision();
 
-        if (checkExplosionCollision()) {
+        if (checkExplosionCollision() || checkComCollision()) {
             JOptionPane.showMessageDialog(null, "You are dead...");
+            System.exit(0);
+        }
+
+        //System.out.println("x= " +x + "y= " + y);
+
+        // Against the 45 degree bug
+        if (x==y-1 || x-1==y) {
+            //System.out.println("out");
+            x=x+2;
+            y=y+1;
+
         }
 
         if (checkCollision()) {
@@ -56,11 +67,13 @@ class Man {
             if (checkCollision()) {
                 y -= speed+1;
             }
-            x += 2;
+            x += speed;
             if (checkCollision()) {
                 x -= speed+1;
             }
+
         }
+
         x = x + xa;
         y = y + ya;
     }
@@ -139,6 +152,15 @@ class Man {
 
     }
 
+    public boolean checkComCollision() {
+        boolean isCollide=false;
+
+        if ( game.com1!=null && getBounds().intersects(game.com1.getBounds())) {
+            isCollide=true;
+        }
+        return isCollide;
+    }
+
     public void keyReleased(KeyEvent e) {
         xa = 0;
         ya = 0;
@@ -160,6 +182,8 @@ class Man {
         }
 
     }
+
+
 
     // This part draws the player on the screen
     public void paint(Graphics2D g) {
@@ -217,10 +241,10 @@ class Man {
             for (int j = 0; j < world[i].length; j++) {
                 if (world[i][j] == Bomb.EXPLOSION) {
                     // Add powerup sometimes
-                    if (chance.nextInt(100)<(10-speed)) {
+                    if (chance.nextInt(100)<((10-exp_length<=1)? 1 : 10-exp_length)) {
                         for (int k=0; k<powerupArr.length; k++) {
                             if (powerupArr[k]==null) {
-                                if (chance.nextInt(100)<20)
+                                if (chance.nextInt(100)<10)
                                     powerupArr[k]= new Powerup(world, 5, i, j);
                                 else
                                     powerupArr[k]= new Powerup(world, 6, i, j);
