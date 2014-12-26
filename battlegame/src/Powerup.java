@@ -28,7 +28,6 @@ class Powerup extends Blocks {
         }
 
         world[powerup_row][powerup_column]=BLOCK;
-
         setPowerupXY();
 
     }

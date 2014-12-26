@@ -9,7 +9,7 @@ class Com {
 
     int PLAYER;
     private static final int PLAYER_SIZE = 30;
-
+    private int myNum;
     private GamePanel game;
     private int x;
     private int y;
@@ -19,21 +19,17 @@ class Com {
     Random rndNumGen = new Random();
 
 
-
-
     // The main array which contains the parts of the world
     private int world[][];
 
     // Constructor
-    public Com(int[][] world, GamePanel game,int num,int START_X, int START_Y) {
-
+    public Com(int[][] world, GamePanel game,int num,int START_X, int START_Y, int myNum) {
+        this.myNum = myNum;
         this.world = world;
         this.game = game;
         PLAYER=num;
         x = START_X;
         y = START_Y;
-//        x = (rndNumGen.nextInt(((480-80)+1)+80)%40)+85;
-//        y =(rndNumGen.nextInt(((400-80)+1)+80)%40)+85;
 
         putPlayerInMatrix();
 
@@ -69,7 +65,8 @@ class Com {
     public void move() {
 
         if (checkExplosionCollision()) {
-            JOptionPane.showMessageDialog(null, "Com dead");
+            game.coms[myNum]=null;
+            game.comCounter--;
         }
 
         if (checkCollision()) {
