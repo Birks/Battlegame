@@ -66,7 +66,7 @@ class Com {
 
         if (checkExplosionCollision()) {
             game.coms[myNum]=null;
-            game.comCounter--;
+            --game.comCounter;
         }
 
         if (checkCollision()) {

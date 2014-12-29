@@ -1,4 +1,9 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 class Walls extends Blocks {
     public static final int WALL = 1;
@@ -10,6 +15,14 @@ class Walls extends Blocks {
         boundArr = new Rectangle[82];
         blockColor = Color.GRAY;
         setWorldBlocks();
+
+        URL imageURL = getClass().getResource("/img-wall.png");
+
+        try {
+            img = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Fills the world array with walls

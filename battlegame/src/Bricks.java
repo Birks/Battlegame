@@ -1,4 +1,7 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
 
 class Bricks extends Blocks {
@@ -11,6 +14,14 @@ class Bricks extends Blocks {
         BLOCK = BRICK;
         blockColor = Color.YELLOW;
         setWorldBlocks();
+
+        URL imageURL = getClass().getResource("/img-bricks.png");
+
+        try {
+            img = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Fills the world array with bricks

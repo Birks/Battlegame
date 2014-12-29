@@ -241,7 +241,7 @@ class Man {
             for (int j = 0; j < world[i].length; j++) {
                 if (world[i][j] == Bomb.EXPLOSION) {
                     // Add powerup sometimes
-                    if (chance.nextInt(100)<((10-exp_length<=1)? 1 : 10-exp_length)) {
+                    if (chance.nextInt(100)<((20-exp_length<=1)? 1 : 20-exp_length)) {
                         for (int k=0; k<powerupArr.length; k++) {
                             if (powerupArr[k]==null) {
                                 if (chance.nextInt(100)<10)

@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +20,8 @@ public class Bomb {
     Timer timerStart;
     Timer timerEnd;
     int counter = 0;
-
+    private Image img;
+    private Image img_fire;
     Rectangle[] boundArr;
 
 
@@ -33,6 +37,21 @@ public class Bomb {
         this.exp_length = exp_length;
         setBombXY();
 
+        URL imageURL = getClass().getResource("/img-bomb.png");
+
+        try {
+            img = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+         imageURL = getClass().getResource("/img-bombfire.png");
+
+        try {
+            img_fire = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         timerStart = new Timer();
         timerStart.schedule(new startTimer(), 5 * 1000);
 
@@ -141,12 +160,11 @@ public class Bomb {
             for (int i = 0; i < world.length; i++) {
                 for (int j = 0; j < world[i].length; j++) {
                     if (world[i][j] == EXPLOSION)
-                        g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                        g.drawImage(img_fire,j * BLOCK_SIZE, i * BLOCK_SIZE,null);
                 }
             }
         } else {
-            g.setColor(Color.BLACK);
-            g.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+            g.drawImage(img,x, y,null);
         }
 
 

@@ -1,8 +1,11 @@
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.URL;
 
 
 class GamePanel extends JPanel {
@@ -18,7 +21,8 @@ class GamePanel extends JPanel {
     public Com com3;
     public Com com4;
     Com[] coms;
-    public int comCounter=6;
+    public int comCounter=14;
+    Image bg;
 
     // Constructor
     public GamePanel() {
@@ -26,6 +30,14 @@ class GamePanel extends JPanel {
         bricks = new Bricks(world);
         walls = new Walls(world);
         man = new Man(world, this);
+
+        URL imageURL = getClass().getResource("/bg.png");
+
+        try {
+            bg = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         coms=new Com[6];
         coms[0] = new Com(world, this, 7, 125, 125,0);
@@ -65,6 +77,7 @@ class GamePanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
+        g.drawImage(bg,0,0,null);
 
         bricks.paint(g2d);
         walls.paint(g2d);
@@ -82,7 +95,7 @@ class GamePanel extends JPanel {
     public void update() {
         man.move();
 
-        if (comCounter<0) {
+        if (comCounter==0) {
             JOptionPane.showMessageDialog(null,"YOU WIN!");
             System.exit(0);
         }

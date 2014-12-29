@@ -5,7 +5,7 @@ class Blocks {
     protected int BLOCK;
     Color blockColor;
     int counter = 0;
-
+    protected Image img;
     Rectangle[] boundArr;
 
     // The main array which contains the parts of the world
@@ -23,7 +23,8 @@ class Blocks {
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
                 if (world[i][j] == BLOCK) {
-                    g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                    //g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                    g.drawImage(img,j * BLOCK_SIZE, i * BLOCK_SIZE,null);
                 }
             }
         }
